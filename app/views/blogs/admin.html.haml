@@ -1,0 +1,17 @@
+-content_for(:blog_content) do
+  #admin
+    #drafts.col
+      %h1
+        Drafts
+        =link_to 'New Draft', {:controller => 'posts', :action => 'new', :blog_slug => @blog.slug}
+      =form_for @post do |f|
+        =f.text_field :title, :placeholder => 'Start typing your title here...'
+        =f.hidden_field :blog_id
+      %ul
+        =render :partial => 'posts/li', :collection => @drafts
+    #published.col
+      %h2
+        Published
+        =link_to 'Home', {:controller => 'posts', :action => 'index', :blog_slug => @blog.slug}
+      %ul
+        =render :partial => 'posts/li', :collection => @published

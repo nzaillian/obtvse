@@ -3,11 +3,14 @@ require 'rdiscount'
 class PostsController < ApplicationController
   before_filter :find_post, :except => :index
   before_filter :find_blog
-	layout 'posts'
+	layout 'blogs'
 
 	def index
-		@posts = Blog.find_by_slug(params[:blog_slug]).posts.page(params[:page]).per(10)
-		@posts = @posts.where(draft: false) if !session[:admin]
+    if current_user == @blog.user
+      @posts = Blog.find_by_slug(params[:blog_slug]).posts.page(params[:page]).per(10)
+    else
+      @posts = Blog.find_by_slug(params[:blog_slug]).posts.where(:draft => false).page(params[:page]).per(10)
+    end
 
 		respond_to do |format|
 			format.html
@@ -18,7 +21,12 @@ class PostsController < ApplicationController
 
 	def show
 		@show = true
-		@post = Blog.find_by_slug(param[:blog_slug]).posts.find_by_slug_and_draft(params[:slug], false)
+    if @blog and params[:post_slug]
+      @posts = @blog.posts.find_by_slug(params[:post_slug])
+    elsif params[:id]
+      @post = Post.find_by_id(params[:id])
+      @blog = @post.blog
+    end
     authorize! :read, @post
 
 		respond_to do |format|
@@ -49,6 +57,7 @@ class PostsController < ApplicationController
 
 	def create
 		@post = Post.new(params[:post])
+
     # b/c we've marked 'blog_id' as a protected attribute
     @post.blog_id = params[:post][:blog_id]
     authorize! :create, @post
@@ -67,11 +76,16 @@ class PostsController < ApplicationController
 	end
 
 	def update
-		@post = Post.find_by_slug(params[:slug])
+		@post = Post.find_by_id(params[:id])
+    authorize! :update, @post
 
 		respond_to do |format|
 			if @post.update_attributes(params[:post])
-				format.html { redirect_to "/edit/#{@post.id}", :notice => "Post updated successfully" }
+				format.html { redirect_to  :controller => 'posts',
+                                   :action => 'edit',
+                                   :blog_slug => @post.blog.slug,
+                                   :post_slug => @post.slug,
+                                   :notice => "Post updated successfully" }
 				format.xml { head :ok }
 			else
 				format.html { render :action => 'edit' }
@@ -81,11 +95,13 @@ class PostsController < ApplicationController
 	end
 
 	def destroy
-		@post = Post.find_by_slug(params[:slug])
+		@post = Post.find_by_id(params[:id])
 		@post.destroy
 
 		respond_to do |format|
-			format.html { redirect_to '/admin' }
+			format.html { redirect_to :controller => 'posts',
+                                :action => 'index',
+                                :blog_slug => @post.blog.slug}
 			format.xml { head :ok }
 		end
 	end

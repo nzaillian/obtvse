@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
     self.settings ||= {}
     self.settings[:nickname] ||= 'Your nickname'
     self.settings[:email] ||= 'your@email.com'
-    self.settings[:twitter] ||= '@your_twitter_handle'
+    self.settings[:twitter] ||= 'your_twitter_handle'
     self.settings[:github] ||= 'http://github.com/your_github_profile'
   end
 end

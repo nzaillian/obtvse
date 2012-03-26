@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.0'
+gem 'rails', '3.2.2'
 gem 'rdiscount'
 gem 'stringex', :git => 'git://github.com/rsl/stringex.git'
 gem 'kaminari'
@@ -13,10 +13,6 @@ end
 group :development do
   gem 'capistrano'
   gem 'sqlite3'
-end
-
-group :production do
-  gem 'pg'
 end
 
 group :test do

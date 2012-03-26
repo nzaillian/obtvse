@@ -1,5 +1,6 @@
 <% content_for(:title) do -%>
   Admin
 <% end %>
-
-<%= render 'form' %>
+<% content_for :blog_content do %>
+    <%= render 'form' %>
+<% end %>

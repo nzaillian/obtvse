@@ -1,11 +1,13 @@
 class BlogsController < ApplicationController
+
   def index
-    # implicit render...
+    render 'blogs/index', :layout => 'application'
   end
 
   def new
     redirect_to(:controller => 'users', :action => 'login') and return if !current_user
     @blog = Blog.new
+    @blog.user = current_user
   end
 
   def create
@@ -21,13 +23,14 @@ class BlogsController < ApplicationController
 
   def admin
   		@no_header = true
+      @blog = Blog.find_by_slug(params[:blog_slug])
   		@post = Post.new
-      @post.blog = Blog.find_by_id(params[:blog_slug])
-  		@published = Blog.find_by_slug(params[:blog_slug]).posts.where(draft:false).page(params[:page]).per(20)
-  		@drafts = Blog.find_by_slug(params[:blog_slug]).posts.where(draft:true).page(params[:page_draft]).per(20)
+      @post.blog = @blog
+  		@published = @blog.posts.where(draft:false).page(params[:page]).per(20)
+  		@drafts = @blog.posts.where(draft:true).page(params[:page_draft]).per(20)
 
   		respond_to do |format|
-  			format.html { render 'admin', :layout => 'admin' }
+  			format.html { render 'blogs/admin' }
   		end
   end
 end

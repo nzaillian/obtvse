@@ -1,6 +1,7 @@
 -content_for(:content) do
-  .title
-    Your Blogs
+  .blogs-index
+    %h2.title
+      Your Blogs:
     %ul.blogs
       -if current_user.blogs.count == 0
         %li.no-blogs
@@ -10,3 +11,6 @@
         -current_user.blogs.each do |blog|
           %li
             =link_to blog.title, {:controller => 'posts', :action => 'index', :blog_slug => blog.slug}
+    -if current_user.blogs.count > 0
+      =link_to "Create a new blog &raquo;".html_safe,
+               {:controller => 'blogs', :action => 'new'}, :class => 'new-blog'

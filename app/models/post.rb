@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   before_validation :slugify_title
   attr_protected :blog_id
+  attr_accessible :title, :content, :draft, :aside
 
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: {scope: :blog_id}
