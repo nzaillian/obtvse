@@ -9,11 +9,11 @@
       =@blog.tagline
     %ul
       %li
-        =link_to '@'+@blog.user.settings[:twitter], "http://twitter.com/#{@blog.user.settings[:twitter]}"
+        =link_to '@'+@blog.settings[:twitter], "http://twitter.com/#{@blog.settings[:twitter]}"
       %li
-        =link_to 'github', @blog.user.settings[:github]
+        =link_to 'github', @blog.settings[:github]
       %li
-        =link_to 'say hi', "mailto:#{@blog.user.settings[:email]}?subject:what's up!"
+        =link_to 'say hi', "mailto:#{@blog.settings[:email]}?subject:what's up!"
       %li
         %a
           rss feed
