@@ -1,0 +1,7 @@
+-content_for(:content) do
+  #admin
+    -if notice
+      %span.notice
+        =notice
+        =yield
+=render template: 'layouts/application'

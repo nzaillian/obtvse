@@ -23,4 +23,10 @@ group :test do
   gem "sqlite3", :platform => [:ruby, :mswin, :mingw]
 end
 
+gem 'bcrypt-ruby', '3.0.1'
+
+gem 'cancan', '1.6.7'
+
+gem 'haml-rails',  '0.3.4'
+
 gem 'jquery-rails'

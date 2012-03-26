@@ -14,4 +14,9 @@
 /log/*.log
 /tmp
 
+/config/config.yml
+
 deploy.rb
+
+.idea/*
+

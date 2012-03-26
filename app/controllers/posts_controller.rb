@@ -1,12 +1,13 @@
 require 'rdiscount'
 
 class PostsController < ApplicationController
-	before_filter :authenticate, except: [:index, :show]
-	layout :choose_layout
+  before_filter :find_post, :except => :index
+  before_filter :find_blog
+	layout 'posts'
 
 	def index
-		@posts = Post.page(params[:page]).per(10)
-		@posts = @posts.where(draft:false) if !session[:admin]
+		@posts = Blog.find_by_slug(params[:blog_slug]).posts.page(params[:page]).per(10)
+		@posts = @posts.where(draft: false) if !session[:admin]
 
 		respond_to do |format|
 			format.html
@@ -15,20 +16,10 @@ class PostsController < ApplicationController
 		end
 	end
 
-	def admin
-		@no_header = true
-		@post = Post.new
-		@published = Post.where(draft:false).page(params[:page]).per(20)
-		@drafts = Post.where(draft:true).page(params[:page_draft]).per(20)
-
-		respond_to do |format|
-			format.html
-		end
-	end
-
 	def show
 		@show = true
-		@post = Post.find_by_slug_and_draft(params[:slug], false)
+		@post = Blog.find_by_slug(param[:blog_slug]).posts.find_by_slug_and_draft(params[:slug], false)
+    authorize! :read, @post
 
 		respond_to do |format|
 			if @post.present?
@@ -42,8 +33,9 @@ class PostsController < ApplicationController
 
 	def new
 		@no_header = true
-		@posts = Post.page(params[:page]).per(20)
+		@posts = Blog.find_by_slug(params[:blog_slug]).posts.page(params[:page]).per(20)
 		@post = Post.new
+    @post.blog = Blog.find_by_slug(params[:blog_slug])
 
 		respond_to do |format|
 			format.html
@@ -53,15 +45,19 @@ class PostsController < ApplicationController
 
 	def edit
 		@no_header = true
-		@post = Post.find(params[:id])
 	end
 
 	def create
 		@post = Post.new(params[:post])
+    # b/c we've marked 'blog_id' as a protected attribute
+    @post.blog_id = params[:post][:blog_id]
+    authorize! :create, @post
 
 		respond_to do |format|
 			if @post.save
-				format.html { redirect_to "/edit/#{@post.id}", :notice => "Post created successfully" }
+				format.html { redirect_to :controller => 'posts', :action => 'edit',
+                                  :blog_slug => @post.blog.slug, :post_slug => @post.slug,
+                                  :notice => "Post created successfully" }
 				format.xml { render :xml => @post, :status => :created, location: @post }
 			else
 				format.html { render :action => 'new' }
@@ -102,5 +98,18 @@ class PostsController < ApplicationController
 		else
 			'application'
 		end
-	end
+  end
+
+  private
+  def find_post
+    if params[:blog_slug] and params[:post_slug]
+      @post = Blog.find_by_slug(params[:blog_slug]).posts.find_by_slug(params[:post_slug])
+    elsif params[:id]
+      @post = Post.find_by_id(params[:id])
+    end
+  end
+
+  def find_blog
+    @blog = Blog.find_by_slug(params[:blog_slug])
+  end
 end

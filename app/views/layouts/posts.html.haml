@@ -1,0 +1,24 @@
+-content_for :container do
+  %header
+    %h1
+      =link_to @blog.title, {:controller =>'posts', :action => 'index', :blog_slug => @blog.slug}
+      %span.tagline
+        =@blog.tagline
+      %ul
+        %li
+          =link_to @blog.user.settings[:twitter]
+        %li
+          =link_to 'github', @blog.user.settings[:github]
+        %li
+          =link_to 'say hi', "mailto:#{@blog.user.settings[:email]}?subject:what's up!"
+        %li
+          %a
+            rss feed
+  =yield(:blog_container)
+
+-content_for(:content) do
+  =yield(:blog_content)
+
+-content_for(:content) do
+  =yield(:blog_content)
+=render template: 'layouts/application'

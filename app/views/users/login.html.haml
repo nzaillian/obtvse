@@ -1,0 +1,14 @@
+-content_for(:users_content) do
+  #user-login.user
+    .info
+      :erb
+        Obtvse is an inclusive platform.
+        To create a free account, head to <%=link_to 'this page', {:controller => 'users', :action => 'register'} %>.
+    =form_for @user, :url => url_for(:action => 'login'), :method => :post do |f|
+      -if @user.errors.count > 0
+        =render :partial => 'application/errs', :locals => {:invalid_record => @user}
+      =f.text_field :email, :placeholder => 'email'
+      .breaker
+      =f.password_field :password, :placeholder => 'password'
+      .breaker
+      =f.submit 'LOG IN'

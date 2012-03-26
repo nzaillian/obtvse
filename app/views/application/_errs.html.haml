@@ -1,0 +1,10 @@
+.alert.alert-error.save-errors
+  Errors were encountered processing your submission.  Please correct the issues listed below and resubmit.
+  %ul
+  -invalid_record.errors.keys.each do |key|
+    - if key != :password_digest
+      %li
+        = "#{key.to_s.gsub('_',' ')} #{invalid_record.errors[key][0]}"
+    -#-else
+    -#  %li
+    -#    = "password #{invalid_record.errors[key][0]}"

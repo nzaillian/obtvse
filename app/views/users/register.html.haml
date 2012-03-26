@@ -1,0 +1,15 @@
+-content_for(:users_content) do
+  #user-register.user
+    .info
+      Welcome to Obtvse, an inclusive, minimalist blogging platform.  To create your account, supply an email address and choose a password.
+
+    =form_for @user, :url => url_for(:action => 'register'), :method => :post do |f|
+      -if @user.errors.count > 0
+        =render :partial => 'application/errs', :locals => {:invalid_record => @user}
+      =f.text_field :email, :placeholder => 'email'
+      .breaker
+      =f.password_field :password, :placeholder => 'password'
+      .breaker
+      =f.password_field :password_confirmation, :placeholder => 'confirm password'
+      .breaker
+      =f.submit 'Register'

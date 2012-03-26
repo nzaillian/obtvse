@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120323052330) do
+ActiveRecord::Schema.define(:version => 20120325220324) do
+
+  create_table "blogs", :force => true do |t|
+    t.text     "settings"
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "tagline"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "slug"
+  end
+
+  add_index "blogs", ["user_id"], :name => "index_blogs_on_user_id"
 
   create_table "posts", :force => true do |t|
     t.string   "title"
@@ -21,7 +33,10 @@ ActiveRecord::Schema.define(:version => 20120323052330) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "aside",      :default => false
+    t.integer  "blog_id"
   end
+
+  add_index "posts", ["blog_id"], :name => "index_posts_on_blog_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
@@ -32,5 +47,16 @@ ActiveRecord::Schema.define(:version => 20120323052330) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.string   "password_digest"
+    t.text     "config"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.text     "settings"
+  end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
 
 end

@@ -1,0 +1,12 @@
+-content_for(:content) do
+  .title
+    Your Blogs
+    %ul.blogs
+      -if current_user.blogs.count == 0
+        %li.no-blogs
+          :erb
+            You haven't yet created a blog.  <%=link_to 'Click here', {:controller => 'blogs', :action => 'new'} %> to do so.
+      -else
+        -current_user.blogs.each do |blog|
+          %li
+            =link_to blog.title, {:controller => 'posts', :action => 'index', :blog_slug => blog.slug}
