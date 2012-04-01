@@ -4,9 +4,9 @@ class Blog < ActiveRecord::Base
   
   attr_protected :user_id, :slug
   belongs_to :user
-  has_many :posts
+  has_many :posts, :dependent => :destroy
 
-  validates :title, :presence => true
+  validates :title, :presence => true, :uniqueness => true
   validates :slug, :presence => true, :uniqueness => true
 
   # We'll store blog user settings as a serialized hash in a
@@ -14,6 +14,8 @@ class Blog < ActiveRecord::Base
   # For now, stored settings will include...
   #   - nickname, email, twitter handle and github handle
   serialize :settings
+
+  serialized_attr_accessor :settings, :nickname, :email, :twitter, :github
   
   private
 

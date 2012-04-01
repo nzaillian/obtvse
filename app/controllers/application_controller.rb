@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   def homepage_router
     if !current_user
-      render('welcome', :layout => false) and return
+      redirect_to :controller => 'users', :action => 'login'
     else
       redirect_to :controller => 'blogs', :action => 'index'
     end

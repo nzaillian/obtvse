@@ -6,11 +6,7 @@ class PostsController < ApplicationController
 	layout 'blogs'
 
 	def index
-    if current_user == @blog.user
-      @posts = Blog.find_by_slug(params[:blog_slug]).posts.page(params[:page]).per(10)
-    else
-      @posts = Blog.find_by_slug(params[:blog_slug]).posts.where(:draft => false).page(params[:page]).per(10)
-    end
+    @posts = Blog.find_by_slug(params[:blog_slug]).posts.where(:draft => false).page(params[:page]).per(10)
 
 		respond_to do |format|
 			format.html
@@ -96,11 +92,12 @@ class PostsController < ApplicationController
 
 	def destroy
 		@post = Post.find_by_id(params[:id])
+    authorize! :destroy, @post
 		@post.destroy
 
 		respond_to do |format|
-			format.html { redirect_to :controller => 'posts',
-                                :action => 'index',
+			format.html { redirect_to :controller => 'blogs',
+                                :action => 'admin',
                                 :blog_slug => @post.blog.slug}
 			format.xml { head :ok }
 		end

@@ -17,6 +17,21 @@
       %li
         %a
           rss feed
+
+    -if current_user and @blog.user == current_user and (!(params[:controller] == 'blogs' and params[:action] == 'new'))
+      =link_to "Edit these properties &raquo;".html_safe,
+                              {:controller => 'blogs',
+                               :action => 'edit',
+                               :blog_slug => @blog.slug},
+               :class => 'blog-properties edit'
+      -if params[:controller] != 'blogs' and params[:action] != 'admin'
+        %br
+        =link_to "Blog Admin &raquo;".html_safe,
+                                {:controller => 'blogs',
+                                 :action => 'admin',
+                                 :blog_slug => @blog.slug},
+                 :class => 'blog-properties edit admin'
+
   =yield(:blog_container)
 
 -content_for(:content) do

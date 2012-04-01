@@ -2,7 +2,7 @@
   #user-login.user
     .info
       :erb
-        Obtvse is an inclusive platform.
+        Obtvse is an inclusive minimalist blogging platform.
         To create a free account, head to <%=link_to 'this page', {:controller => 'users', :action => 'register'} %>.
     =form_for @user, :url => url_for(:action => 'login'), :method => :post do |f|
       -if @user.errors.count > 0
@@ -11,4 +11,4 @@
       .breaker
       =f.password_field :password, :placeholder => 'password'
       .breaker
-      =f.submit 'LOG IN'
+      =f.submit 'LOG IN', :class => 'button'

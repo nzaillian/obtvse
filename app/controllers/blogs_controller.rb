@@ -33,4 +33,34 @@ class BlogsController < ApplicationController
   			format.html { render 'blogs/admin' }
   		end
   end
+
+  def update
+    @blog = Blog.find_by_slug(params[:blog_slug])
+    slug_orig = @blog.slug
+    authorize! :update, @blog
+    if @blog.update_attributes(params[:blog])
+      flash.now[:notice] = 'Your settings have been saved'
+    else
+      flash.  now[:notice] = 'Errors occurred saving your settings (see below)'
+      # because the edit form's submit path is dependent on the slug(which is derived)
+      # from the model's name, it will be incorrect if the name fails to validate
+      # and we need to explicitly set it to its former value like so...
+      @blog.slug = slug_orig if @blog.errors[:title].count  > 0
+    end
+    render :action => 'edit'
+  end
+
+  def edit
+    @blog = Blog.find_by_slug(params[:blog_slug])
+    authorize! :update, @blog
+    render 'edit', :layout => 'blogs'
+  end
+
+  def destroy
+    @blog = Blog.find_by_slug(params[:blog_slug])
+    authorize! :destroy, @blog
+    @blog.destroy
+    redirect_to :controller => 'blogs', :action => 'index',
+                :notice => "Your blog \"#{@blog.title}\" has been permanently deleted."
+  end
 end

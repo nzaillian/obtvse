@@ -18,10 +18,12 @@ Obtvse::Application.routes.draw do
 
   scope '/:blog_slug' do
     get '/new' => 'posts#new'
-    match '/admin' => 'blogs#admin'
+    get '/admin' => 'blogs#admin'
+    get '/edit' => 'blogs#edit'
+    put '/edit' => 'blogs#update'
     get '/:post_slug' => 'posts#show'
     get '/:post_slug/edit' => 'posts#edit'
   end
-
-  match '/:blog_slug' => 'posts#index'
+  get '/:blog_slug' => 'posts#index'
+  delete '/:blog_slug' => 'blogs#destroy'
 end

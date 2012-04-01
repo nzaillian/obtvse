@@ -1,0 +1,34 @@
+-content_for :blog_content do
+  #admin
+    %h2
+      Blog Properties
+    -if @blog.errors.count > 0
+      =render :partial => 'application/errs', :locals => {:invalid_record => @blog}
+    =form_for @blog,:url => url_for(:controller => '/blogs', :action => 'update',
+              :blog_slug => @blog.slug), :method => :put do |f|
+      .field-label
+        title:
+      =f.text_field 'title'
+      .breaker
+      .field-label
+        tagline:
+      =f.text_field 'tagline'
+      .breaker
+      .field-label
+        twitter username:
+      =f.text_field 'settings_twitter'
+      .breaker
+      .field-label
+        github url:
+      =f.text_field 'settings_github'
+      .breaker
+      .field-label
+        email address:
+      =f.text_field 'settings_email'
+      .breaker
+      =f.submit "Save", :class => 'button'
+      .breaker
+      .delete-wrap
+        =link_to "Delete this blog", {:controller => 'blogs', :action => 'destroy', :blog_slug => @blog.slug},
+                  :confirm => "Are you sure you want to delete this blog? (this action cannot be undone)",
+                  :method => :delete, :class => 'delete-button'

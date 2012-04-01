@@ -1,3 +1,6 @@
 -content_for(:blog_content) do
+  -if @posts.count == 0
+    .no-posts
+      Content for this blog coming soon
   =render @posts
   =paginate @posts

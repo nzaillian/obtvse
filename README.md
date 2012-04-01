@@ -2,6 +2,10 @@ Codename: Obtvse
 ================
 Clean, simple blog.  Inspired by [Svbtle](http://svbtle.com).
 
+About This Fork (nzaillian/obtvse)
+==================================
+This fork of the Obtvse blogging platform adds support for multiple user accounts and multiple blogs.  Furthermore, basic configuration of each blog can, in this fork, be accomplished from within the browser via admin forms (in the upstream project, users must edit a configuration file to accomplish the same).
+
 **Demo**
 
 http://obtvse.herokuapp.com
@@ -10,7 +14,6 @@ http://obtvse.herokuapp.com/admin
 
 Username: username
 Password: password
-
 
 Installation
 ============

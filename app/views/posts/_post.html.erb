@@ -23,8 +23,16 @@
   </div>
 
   <% if @show %>
-      <%= link_to 'Back to Blog', {:controller => 'posts',
-                                   :action => 'index', :blog_slug => (@post.blog.slug || @blog.slug)},
+      <%= link_to "&laquo; Back to Blog".html_safe, {:controller => 'posts',
+                                   :action => 'index',
+                                   :blog_slug => (post.blog.slug || @blog.slug)},
                                    :class => 'button space-top' %>
+      <% if current_user and post.blog.user == current_user %>
+      <%= link_to "Edit Post &raquo;".html_safe, {:controller => 'posts',
+                                            :action => 'edit',
+                                            :blog_slug => post.blog.slug,
+                                            :post_slug => post.slug},
+                                    :class => 'button space-top' %>
+      <% end %>
   <% end %>
 </section>
